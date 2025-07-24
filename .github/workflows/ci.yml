@@ -19,12 +19,12 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install poetry poethepoet
-          poetry install --only dev
+          pip install uv
+          uv sync --all-extras
       - name: Format
-        run: poe ci-format
+        run: ruff format youtube_transcript_api --check
       - name: Lint
-        run: poe lint
+        run: ruff check youtube_transcript_api
 
   test:
     runs-on: ubuntu-latest
@@ -41,11 +41,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install poetry poethepoet
-          poetry install --with test
+          pip install uv
+          uv sync --all-extras
       - name: Run tests
         run: |
-          poe ci-test
+          coverage run -m pytest youtube_transcript_api && coverage xml
       - name: Report intermediate coverage report
         uses: coverallsapp/github-action@v2
         with:
@@ -71,10 +71,10 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install poetry poethepoet
-          poetry install --with test
+          pip install uv
+          uv sync --all-extras
       - name: Check coverage
-        run: poe coverage
+        run: coverage report -m --fail-under=100
 
   publish:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
@@ -89,9 +89,12 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install poetry
-          poetry install
+          pip install uv
+          uv sync
       - name: Build
-        run: poetry build
+        run: uv build
       - name: Publish
-        run: poetry publish -u __token__ -p ${{ secrets.PYPI_TOKEN }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
