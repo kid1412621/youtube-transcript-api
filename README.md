@@ -363,7 +363,7 @@ ytt_api = YouTubeTranscriptApi(
 ytt_api.fetch(video_id)
 ```
 
-Be aware that using a proxy doesn't guarantee that you won't be blocked, as YouTube can always block the IP of your
+Be aware that a proxy doesn't guarantee that you won't be blocked, as YouTube can always block the IP of your
 proxy! Therefore, you should always choose a solution that rotates through a pool of proxy addresses, if you want to
 maximize reliability.
 
@@ -565,7 +565,7 @@ To setup the project locally run the following (requires [uv](https://github.com
 ```shell
 uv venv
 source .venv/bin/activate
-uv sync --all-extras
+uv pip install -e .[dev,test]
 ```
 
 To run the tests, linter and formatter, use the following commands:

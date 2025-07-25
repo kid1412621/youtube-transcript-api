@@ -43,6 +43,7 @@ jobs:
         run: |
           pip install uv
           uv sync --all-extras
+          uv pip install coverage
       - name: Run tests
         run: |
           coverage run -m pytest youtube_transcript_api && coverage xml
@@ -73,6 +74,7 @@ jobs:
         run: |
           pip install uv
           uv sync --all-extras
+          uv pip install coverage
       - name: Check coverage
         run: coverage report -m --fail-under=100
 
